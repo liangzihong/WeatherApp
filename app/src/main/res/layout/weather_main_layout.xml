@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8000">
+
+
+    <!--必应的每日一图，因为是framelayout，所以作为背影-->
+
+    <ImageView
+        android:id="@+id/weather_main_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+
+    <!--作为滚动刷新的控件-->
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/weather_main_refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <include layout="@layout/title_layout"> </include>
+            <include layout="@layout/todayweather_layout"></include>
+            <include layout="@layout/forecast_layout"></include>
+            <include layout="@layout/aqi_layout"></include>
+
+            <include layout="@layout/suggestion_layout"></include>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</FrameLayout>
