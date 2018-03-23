@@ -43,8 +43,8 @@ public class forecast_adapter extends ArrayAdapter<forecast_model> {
 
         forecast_item_date.setText(model.getDate());
         forecast_item_weatherState.setText(model.getState());
-        forecast_item_max.setText(model.getMax());
-        forecast_item_min.setText(model.getMin());
+        forecast_item_max.setText(model.getMax()+"℃");
+        forecast_item_min.setText(model.getMin()+"℃");
 
         return view;
     }

@@ -1,16 +1,20 @@
 package Activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.liangzihong.myweather.R;
 
@@ -19,6 +23,7 @@ import java.util.List;
 
 import Adapters.forecast_adapter;
 import Adapters.forecast_model;
+import Daos.DaoOfDistrict;
 import Gsons.All;
 import Gsons.Aqi;
 import Gsons.Basic;
@@ -31,7 +36,7 @@ import Presenters.LoadPicPresenter;
 import Presenters.UpdateDataPresenter;
 import Utils.UIHelper;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,ILoadPicView, ICloseDrawerView,IUpdateDataView {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,ILoadPicView, ICloseDrawerView,IUpdateDataView,SwipeRefreshLayout.OnRefreshListener {
 
 
 
@@ -50,11 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView suggestion_comfortText;
     private TextView suggestion_washCarText;
     private TextView suggestion_sportText;
-
-//    private TextView forecast_item_date;
-//    private TextView forecast_item_weatherState;
-//    private TextView forecast_item_max;
-//    private TextView forecast_item_min;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     //listview的适配器和数据源
@@ -69,6 +70,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //选中要看的区县
     private District selectedDistrict;
+
+
+
+    //设置  pref和editor
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
 
 
     @Override
@@ -100,34 +107,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         suggestion_comfortText=(TextView)findViewById(R.id.suggestion_comfortText);
         suggestion_washCarText=(TextView)findViewById(R.id.suggestion_washCarText);
         suggestion_sportText=(TextView)findViewById(R.id.suggestion_sportText);
+        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.weather_main_refreshLayout);
+
+        //设置响应事件
+        home_button.setOnClickListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
 
 
-//        forecast_item_date=(TextView)findViewById(R.id.forecast_item_date);
-//        forecast_item_weatherState=(TextView)findViewById(R.id.forecast_item_weatherState);
-//        forecast_item_max=(TextView)findViewById(R.id.forecast_item_max);
-//        forecast_item_min=(TextView)findViewById(R.id.forecast_item_min);
 
 
+
+
+
+        //listview的相关配置
         dataSource=new ArrayList<>();
         adapter=new forecast_adapter(this,R.layout.forecast_item_layout,dataSource);
         forecast_listView.setAdapter(adapter);
         UIHelper.setListViewHeightBasedOnChildren(forecast_listView);
-        /**
-         * 还剩一个forecast的listview要配置数据
-         */
 
 
 
+        //如果在本地中已经有存储的地方，可以直接拿出来，调用  startUpdate()
+        pref=getSharedPreferences("MyWeather",MODE_PRIVATE);
+        editor=pref.edit();
+        String tmpDistrictName=pref.getString("LastPlace",null);
+        if(tmpDistrictName!=null){
+            selectedDistrict= DaoOfDistrict.getDistrictByDistrictName(tmpDistrictName);
+            startUpdate();
+        }
 
-
-
-
-
-        home_button.setOnClickListener(this);
     }
 
 
+    /**
+     * 按钮的响应事件
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -138,6 +154,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    /**
+     * 下拉刷新的响应事件
+     */
+    @Override
+    public void onRefresh() {
+        if(selectedDistrict!=null)
+            startUpdate();
+        Log.i("tag", "onRefresh: x");
+        swipeRefreshLayout.setRefreshing(false);
+    }
 
 
 
@@ -147,17 +173,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+    /**
+     * 临关闭前，把selectedDistrict放入本地缓存中
+     * 以后一打开，就是这个地方
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(selectedDistrict!=null){
+            editor.putString("LastPlace",selectedDistrict.getName());
+            editor.commit();
+        }
 
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 
@@ -247,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Suggestion suggestion=heWeather.getSuggestion();
 
         title_cityName.setText(basic.getParent_city()+"-"+basic.getLocation());
-        title_updateTime.setText(updateTime.getLoc());
+        title_updateTime.setText(updateTime.getLoc().substring(0,10));
 
         todayweather_temperature.setText(now.getTmp()+"℃");
         todayweather_weatherState.setText("风向："+now.getWind_dir()+"  "+
@@ -276,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         suggestion_sportText.setText("运动建议："+suggestion.getSport().getBrf()+"\n"+suggestion.getSport().getTxt()+"\n");
 
     }
+
 
 }
 
