@@ -1,4 +1,4 @@
-package com.example.liangzihong.myweather;
+package Activities;
 
 import android.app.Activity;
 import android.widget.ImageView;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
  */
 
 public interface ILoadPicView {
+
     public void loadPicToView();
     public ImageView getImageView();
     public Activity getActivity();

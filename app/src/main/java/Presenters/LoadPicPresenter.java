@@ -1,16 +1,8 @@
 package Presenters;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.text.LoginFilter;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.example.liangzihong.myweather.ILoadPicView;
+
+import Activities.ILoadPicView;
 import com.example.liangzihong.myweather.MyApplication;
 import com.example.liangzihong.myweather.R;
 
@@ -27,6 +19,10 @@ public class LoadPicPresenter implements ILoadPic {
     private final String UrlOfAllPicture="http://guolin.tech/api/bing_pic";
 
 
+    /**
+     * 构造函数
+     * @param picView
+     */
     public LoadPicPresenter(ILoadPicView picView) {
         iView = picView;
     }
@@ -40,7 +36,7 @@ public class LoadPicPresenter implements ILoadPic {
     public void LoadPicture() {
 
         //如果没有网络，就用自己家的图片
-        if(NetworkCheck.isNetworkConnected(MyApplication.context)==false) {
+        if(NetworkCheck.isNetworkConnected()==false) {
             Glide.with(MyApplication.context)
                     .load(R.drawable.defaultbackground)
                     .into(iView.getImageView());
