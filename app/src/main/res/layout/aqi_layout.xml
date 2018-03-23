@@ -8,9 +8,10 @@
 
 
     <TextView
+        android:id="@+id/aqi_airValue"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="生活指数"
+        android:text="空气质量："
         android:textSize="20sp"
         android:textColor="#fff"/>
 
@@ -32,7 +33,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:gravity="center"
-                android:text="40"
                 android:textSize="40sp"
                 android:textColor="#fff"
                 android:layout_weight="2"/>
@@ -63,7 +63,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:gravity="center"
-                android:text="2.20"
                 android:textSize="40sp"
                 android:textColor="#fff"
                 android:layout_weight="2"/>

@@ -29,6 +29,7 @@ import Gsons.Update;
 import Models.District;
 import Presenters.LoadPicPresenter;
 import Presenters.UpdateDataPresenter;
+import Utils.UIHelper;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,ILoadPicView, ICloseDrawerView,IUpdateDataView {
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ListView forecast_listView;
     private TextView aqi_aqiValue;
     private TextView aqi_PMValue;
+    private TextView aqi_airValue;
     private TextView suggestion_comfortText;
     private TextView suggestion_washCarText;
     private TextView suggestion_sportText;
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         forecast_listView=(ListView)findViewById(R.id.forecast_listView);
         aqi_aqiValue=(TextView)findViewById(R.id.aqi_aqiValue);
         aqi_PMValue=(TextView)findViewById(R.id.aqi_PMValue);
+        aqi_airValue=(TextView)findViewById(R.id.aqi_airValue);
         suggestion_comfortText=(TextView)findViewById(R.id.suggestion_comfortText);
         suggestion_washCarText=(TextView)findViewById(R.id.suggestion_washCarText);
         suggestion_sportText=(TextView)findViewById(R.id.suggestion_sportText);
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dataSource=new ArrayList<>();
         adapter=new forecast_adapter(this,R.layout.forecast_item_layout,dataSource);
         forecast_listView.setAdapter(adapter);
+        UIHelper.setListViewHeightBasedOnChildren(forecast_listView);
         /**
          * 还剩一个forecast的listview要配置数据
          */
@@ -245,9 +249,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         title_cityName.setText(basic.getParent_city()+"-"+basic.getLocation());
         title_updateTime.setText(updateTime.getLoc());
 
-        todayweather_temperature.setText(now.getTmp());
+        todayweather_temperature.setText(now.getTmp()+"℃");
         todayweather_weatherState.setText("风向："+now.getWind_dir()+"  "+
-                                    "风力："+now.getWind_spd()+"  "+
+                                    "风速："+now.getWind_spd()+"  "+
                                     "天气："+now.getCond_txt());
 
 
@@ -259,15 +263,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dataSource.add(model);
         }
         adapter.notifyDataSetChanged();
+        UIHelper.setListViewHeightBasedOnChildren(forecast_listView);
+
 
 
         aqi_aqiValue.setText(aqi.getAqi_city().getAqi());
         aqi_PMValue.setText(aqi.getAqi_city().getPm25());
+        aqi_airValue.setText("空气质量："+aqi.getAqi_city().getQlty());
 
-
-        suggestion_comfortText.setText(suggestion.getComf().getBrf()+"\n"+suggestion.getComf().getTxt());
-        suggestion_washCarText.setText(suggestion.getCw().getBrf()+"\n"+suggestion.getCw().getTxt());
-        suggestion_sportText.setText(suggestion.getSport().getBrf()+"\n"+suggestion.getSport().getTxt());
+        suggestion_comfortText.setText("舒适度："+suggestion.getComf().getBrf()+"\n"+suggestion.getComf().getTxt()+"\n");
+        suggestion_washCarText.setText("洗车建议："+suggestion.getCw().getBrf()+"\n"+suggestion.getCw().getTxt()+"\n");
+        suggestion_sportText.setText("运动建议："+suggestion.getSport().getBrf()+"\n"+suggestion.getSport().getTxt()+"\n");
 
     }
 

@@ -33,12 +33,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                         android:overScrollMode="never">
+
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical">
 
-                            <include layout="@layout/title_layout"> </include>
+                            <include layout="@layout/title_layout"></include>
                             <include layout="@layout/todayweather_layout"></include>
                             <include layout="@layout/forecast_layout"></include>
                             <include layout="@layout/aqi_layout"></include>
