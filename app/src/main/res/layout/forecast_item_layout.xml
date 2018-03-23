@@ -16,7 +16,7 @@
             android:id="@+id/forecast_item_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="1.2"
             android:text="2017-10-01"
             android:textSize="20sp"
             android:textColor="#fff"
@@ -27,6 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="晴"
             android:textSize="20sp"
             android:textColor="#fff"
@@ -38,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="36"
+            android:gravity="center"
             android:textSize="20sp"
             android:textColor="#fff"
             />
@@ -48,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="25"
+            android:gravity="center"
             android:textSize="20sp"
             android:textColor="#fff"
             />

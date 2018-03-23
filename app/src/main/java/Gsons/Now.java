@@ -9,9 +9,14 @@ public class Now {
     private String cond_txt;
     private String wind_dir;
     private String wind_spd;
+    private String tmp;
 
     public String getCond_txt() {
         return cond_txt;
+    }
+
+    public String getTmp() {
+        return tmp;
     }
 
     public String getWind_dir() {

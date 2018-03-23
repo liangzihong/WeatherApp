@@ -40,7 +40,7 @@ public class GsonTest {
         all=gson.fromJson(jsondata,All.class);
         All.HeWeather heweather=all.getHeWeathers().get(0);
 
-        Log.i("info", "testGson: "+heweather.getBasic().getCity());
+        //Log.i("info", "testGson: "+heweather.getBasic().getParent_city());
     }
 
 }

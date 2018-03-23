@@ -7,13 +7,13 @@ package Gsons;
 public class Basic {
 
     private String location;
-    private String city;
+    private String parent_city;
 
     public String getLocation() {
         return location;
     }
 
-    public String getCity() {
-        return city;
+    public String getParent_city() {
+        return parent_city;
     }
 }

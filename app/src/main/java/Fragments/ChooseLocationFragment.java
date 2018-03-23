@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import Activities.ICloseDrawerView;
 import Daos.DaoOfCity;
 import Daos.DaoOfDistrict;
 import Daos.DaoOfProvince;
@@ -38,6 +39,7 @@ import static Utils.HttpUtil.sendHttpRequest;
 
 public class ChooseLocationFragment extends Fragment implements AdapterView.OnItemClickListener{
 
+    //控件
     private ListView listView;
     private Button Province_Button;
     private Button City_Button;
@@ -45,31 +47,42 @@ public class ChooseLocationFragment extends Fragment implements AdapterView.OnIt
     private View view;
 
 
+    //选中的 省份，城市，地区
     private Province selectedProvince;
     private City selectedCity;
     private District selectedDistrict;
     private String weather_id;
 
+    //选择的层次
     public static final int ProvinceLevel=0;
     public static final int CityLevel=1;
     public static final int DistrictLevel=2;
     private int NowLevel=0;
 
 
+    //listView控件的选项，ListViewItem是数据源
     private List<String> ListViewItem=new ArrayList<>();
     private ArrayAdapter<String > adapter;
 
-
+    //这个是进度条，表示在服务器查找时在主线程显示出来，消灭是 在主线程，顺便 把adapter更新
     private ProgressDialog progressDialog;
+
+
+    //ICloseDrawerView
+    private ICloseDrawerView iCloseDrawerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
 
         view=inflater.inflate(R.layout.chooselocation_layout,container,false);
+        iCloseDrawerView=(ICloseDrawerView) getActivity();
         init();
-
         return view;
     }
+
+
+
+
 
     /**
      * 最简单的初始化
@@ -178,6 +191,7 @@ public class ChooseLocationFragment extends Fragment implements AdapterView.OnIt
                 adapter.notifyDataSetChanged();
                 NowLevel=ProvinceLevel;
 
+                iCloseDrawerView.closeDrawer(selectedDistrict);
                 /**
                  * 这里以后还要进行  选择  操作
                  */
